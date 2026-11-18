@@ -38,9 +38,12 @@ email and reply 2 the trigger.
 
 | Vector | Kind | Variations | Trials per model |
 | --- | --- | ---: | ---: |
-| V1 | Visible plain-text request in the body | 4 | 20 |
+| V1 | Visible plain-text request in the body | 4 | 24 |
 | V2 | Instruction hidden in HTML (CSS-hidden text, comment, `alt`, `title`) | 5 | 25 |
-| V3 | Instruction planted in an earlier email and triggered by a later one | 4 | 20 |
+| V3 | Instruction planted in an earlier email and triggered by a later one | 4 | 24 |
+
+The plan asks for 24 repetitions, four more than the 20-trial minimum per vector and model, so a
+failed trial does not leave a cell short.
 
 ## Models and settings
 
@@ -51,7 +54,7 @@ email and reply 2 the trigger.
 
 Ollama 0.40.5, CPU inference. Trials sample at temperature 0.8 with `num_ctx` 4096 and
 `num_predict` 192. Each trial has its own seed: the launch seed (default 1000) plus the trial's
-queue position within its vector, so V1 uses 1000–1019, V2 1000–1024 and V3 1000–1019. The seed,
+queue position within its vector, so V1 uses 1000–1023, V2 1000–1024 and V3 1000–1023. The seed,
 temperature, model digest and system-prompt hash are recorded in every row. The harness refuses
 to run if the installed digest differs from the one selected at launch.
 
@@ -79,7 +82,7 @@ cd mail-lab
 ```
 
 In a second terminal, run the full plan on each model. Each command saves the plan into the
-console, runs 65 trials, and writes `results/<sequence-id>/`.
+console, runs 73 trials, and writes `results/<sequence-id>/`.
 
 ```sh
 cd mail-lab

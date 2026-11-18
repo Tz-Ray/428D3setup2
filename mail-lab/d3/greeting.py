@@ -31,6 +31,7 @@ SMOKE_SYSTEM = 'For this local greeting check, respond with exactly "Hello from 
 OPTIONS = {"temperature": 0, "seed": 1000, "num_ctx": 4096, "num_predict": 64}
 SAMPLING_TEMPERATURE = 0.8
 REPLAY_NUM_PREDICT = 192
+MODEL_TIMEOUT = 900  # seconds per model call; a 192-token CPU reply can pass 240 s under load
 
 
 class RunSettings(Fields):
@@ -174,7 +175,7 @@ def run_check(path, record, check_stop=None):
             archive.try_export_turn(path, record, number)
 
     try:
-        with closing(sqlite3.connect(":memory:", check_same_thread=False)) as db, local_client(240) as ollama:
+        with closing(sqlite3.connect(":memory:", check_same_thread=False)) as db, local_client(MODEL_TIMEOUT) as ollama:
             db.row_factory = sqlite3.Row
             db.execute("""CREATE TABLE mail(id INTEGER PRIMARY KEY, sender TEXT, recipient TEXT,
                         subject TEXT, body TEXT, parent INTEGER UNIQUE, media_type TEXT DEFAULT 'text/plain')""")
