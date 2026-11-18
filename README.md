@@ -61,10 +61,22 @@ to run if the installed digest differs from the one selected at launch.
 
 ## Setup
 
-Needs Python 3.12, Node 24 and Ollama.
+Needs Python 3.12, 3.13 or 3.14, Node 24 and Ollama.
+
+| Component | Version used for the results | Also verified |
+| --- | --- | --- |
+| Python | CPython 3.12.13 | Test suite passes on 3.13.14 and 3.14.6 (the team repository's standard is 3.14) |
+| Python packages | fastapi 0.149.0, pydantic 2.14.1, uvicorn 0.54.0, httpx 0.27.2, pytest 8.3.4 (`mail-lab/requirements.txt`) | Same pins install on all three Python versions |
+| Node / npm | 24.13.1 / 11 (console build only: vue 3.5.44, vite 5.4.21) | |
+| Ollama | 0.40.5, CPU inference | |
+| OS | Ubuntu on WSL2, Linux x86-64 | |
+
+Python 3.9 and older cannot run the harness (it uses `X | None` annotations). The Python version
+does not affect model output; that depends on the Ollama version, model digest, options and seed,
+all recorded per trial.
 
 ```sh
-uv venv --python 3.12
+uv venv --python 3.12        # 3.13 and 3.14 also work
 uv pip install -r mail-lab/requirements.txt
 ollama pull llama3.1:8b-instruct-q4_K_M
 ollama pull qwen2.5:3b-instruct-q4_K_M

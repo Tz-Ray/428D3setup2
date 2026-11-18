@@ -336,3 +336,7 @@ Commit `9a39405` is tagged `baseline`. The service was started from it and the b
 The mitigation is `mail-lab/d3/mitigation.py` (`untrusted-data-v1`), switched per run with `d3_run.py run --mitigation`: reader-visible text only for HTML mail, nonce-marked untrusted email blocks, and a fixed rule block appended to the system prompt. Tests cover the sanitizer on every hiding technique in V2 and check that a baseline request is byte-for-byte unchanged. The lab suite passes 27 tests.
 
 Results are now exported per run to `mail-lab/results/<arm>/<model>_<sequence>/` with `run.json`, `trials.csv`, the plan and rules used, a database extract, and each trial's transcript, full record and per-turn files. `d3_run.py summary` writes `results/summary.md` and fails if any cell has fewer than 20 finished trials. The two one-word smoke runs moved to `results/smoke/`.
+
+## 2026-11-18 — Python version check
+
+The results are produced with CPython 3.12.13. The team's cloned repository (commit `3e551eb`) names Python 3.14 as its standard in `backend/README.md` (verified there on 3.14.6), while its root README says 3.10+ and tested on 3.13. This harness's 27 tests pass in fresh environments on 3.13.14 and 3.14.6 with the pinned `mail-lab/requirements.txt`, as well as on 3.12.13. The harness needs 3.10 or newer; the machine's system Python 3.8.10 cannot run it. The writeup's Setup section should state these versions.
