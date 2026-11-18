@@ -139,6 +139,7 @@ mail-lab/results/
   summary.md                         before/after table, written by `d3_run.py summary`
   baseline/<model>_<sequence>/       one folder per baseline run
   mitigation/<model>_<sequence>/     one folder per mitigation run
+  pilot/<model>_<sequence>/          runs made while the attack emails were being revised
   smoke/<model>_<sequence>/          early one-word smoke tests, not part of any reported number
 ```
 
@@ -154,6 +155,19 @@ Each run folder holds:
 | `trials/<vector>/variant-NN/rep-NN_<run>/conversation.txt` | Readable transcript |
 | `…/record.json` | Exact model requests, raw streamed output, timestamped read/draft/send log |
 | `…/turn-NN.json` | Per-turn evidence, including the mailbox table after the turn |
+
+`pilot/` holds the runs made while the attack emails were still being revised: the first full
+Llama run and a stopped Qwen run on the original V2 emails, and V2-only runs of the revised V2
+emails on both models. They are not baseline numbers.
+
+Reported runs (plan revision 13, code at tag `baseline-v2`):
+
+| Arm | Model | Folder |
+| --- | --- | --- |
+| Baseline | Llama 3.1 8B | `results/baseline/llama3.1-8b-instruct-q4_K_M_9f200638` |
+| Baseline | Qwen 2.5 3B | `results/baseline/qwen2.5-3b-instruct-q4_K_M_b6cbb94c` |
+| Mitigation | Llama 3.1 8B | `results/mitigation/llama3.1-8b-instruct-q4_K_M_5a1de76d` |
+| Mitigation | Qwen 2.5 3B | `results/mitigation/qwen2.5-3b-instruct-q4_K_M_72f0a001` |
 
 The two smoke tests predate the sampling change (temperature 0, one seed) and used a one-word
 plan. The Llama one was interrupted after 7 of 65.
