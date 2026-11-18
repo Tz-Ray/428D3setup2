@@ -32,6 +32,8 @@ def saved_records(plan, model, request, selected):
     for vector in ("v1", "v2", "v3"):
         if selected and vector != selected[0]:
             continue
+        if getattr(request, "vector", None) not in (None, vector):
+            continue
         group = plan["vectors"][vector]
         slots = [(number, draft, draft_delivery.populated_mail(vector, draft))
                  for number, draft in enumerate(group["variations"][:group["count"]], 1)]

@@ -254,7 +254,8 @@ def run(args):
             sys.exit(f"{model} is not installed in Ollama. Run: ollama pull {model}")
         started = api.post("/api/sequences", json={"revision": revision, "slot": args.slot, "seed": args.seed,
                                                    "source": "saved", "digest": installed[model],
-                                                   **({"mitigation": True} if args.mitigation else {})})
+                                                   **({"mitigation": True} if args.mitigation else {}),
+                                                   **({"vector": args.vector} if args.vector else {})})
         if started.status_code != 202:
             sys.exit(f"Launch refused ({started.status_code}): {started.text}")
         sequence_id = started.json()["sequence_id"]
@@ -262,7 +263,7 @@ def run(args):
               f"plan revision {revision}, mitigation {'on' if args.mitigation else 'off'}", flush=True)
     while any(r["status"] in {"queued", "running", "paused"} for r in records(sequence_id)):
         time.sleep(5)
-    export(sequence_id, args.rules, {"revision": revision, "plan": plan})
+    export(sequence_id, args.rules, {"revision": revision, "plan": plan}, args.label)
 
 
 def main():
@@ -275,6 +276,8 @@ def main():
     launch.add_argument("--plan", help="plan JSON (plans/, a results plan.json, or a console download)")
     launch.add_argument("--rules", default=str(RULES))
     launch.add_argument("--mitigation", action="store_true", help="run the untrusted-data mitigation arm")
+    launch.add_argument("--vector", choices=["v1", "v2", "v3"], help="run only this vector of the plan")
+    launch.add_argument("--label", help="results subfolder instead of baseline/mitigation, e.g. pilot")
     again = commands.add_parser("export")
     again.add_argument("sequence_id")
     again.add_argument("--rules", default=str(RULES))

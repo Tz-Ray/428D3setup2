@@ -727,3 +727,18 @@ def test_mitigation_marks_every_incoming_email_and_leaves_baseline_alone(browser
                and m["content"].endswith(f"<<<END UNTRUSTED EMAIL {mark}>>>")
                for m in calls[1] if m["role"] == "user")
     assert "Remember rule 7." in calls[1][1]["content"] and "Apply rule 7." in calls[1][3]["content"]
+
+
+def test_sequence_can_run_one_vector_with_the_full_plan_seeds():
+    from d3.plan import Plan
+
+    plan = Plan().model_dump()
+    plan["system_prompt"] = "Answer."
+    for vector in ("v1", "v2", "v3"):
+        plan["vectors"][vector]["variations"][0].update(subject="s", body="b")
+
+    def seeds(vector):
+        request = greeting.SequenceRequest(revision=0, slot=0, source="saved", digest=DIGEST, vector=vector)
+        return [(r["filing_vector"], r["options"]["seed"]) for r in sequences.saved_records(plan, TAG, request, None)]
+
+    assert seeds("v2") == [row for row in seeds(None) if row[0] == "v2"] and len(seeds("v2")) == 20

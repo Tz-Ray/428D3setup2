@@ -43,6 +43,7 @@ class RunSettings(Fields):
 
 class SequenceRequest(RunSettings):
     source: Literal["saved", "fruit"]
+    vector: Literal["v1", "v2", "v3"] | None = None  # run one vector of the saved plan
     digest: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
 
 

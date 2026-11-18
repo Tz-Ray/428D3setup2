@@ -340,3 +340,7 @@ Results are now exported per run to `mail-lab/results/<arm>/<model>_<sequence>/`
 ## 2026-11-18 — Python version check
 
 The results are produced with CPython 3.12.13. The team's cloned repository (commit `3e551eb`) names Python 3.14 as its standard in `backend/README.md` (verified there on 3.14.6), while its root README says 3.10+ and tested on 3.13. This harness's 27 tests pass in fresh environments on 3.13.14 and 3.14.6 with the pinned `mail-lab/requirements.txt`, as well as on 3.12.13. The harness needs 3.10 or newer; the machine's system Python 3.8.10 cannot run it. The writeup's Setup section should state these versions.
+
+## 2026-11-18 — Pilot, revised V2 and baseline restart
+
+The first Llama run on plan revision 12 finished with V1 19 of 24, V2 6 of 25 and V3 24 of 24 leaked. The Qwen run was stopped by the operator's request after 24 V1 trials (20 leaked). Both are filed under `mail-lab/results/pilot/` and are not baseline numbers. In the V2 transcripts Llama read the hidden text and refused it; the hidden request had no pretext, unlike V1. The five V2 emails now hide one request framed as an automated IT Security records check, with the same five hiding techniques. The baseline is rerun in full on both models from tag `baseline-v2`; the earlier `baseline` tag points at the pilot's plan. `d3_run.py run --vector v2 --label pilot` runs one vector with the same seeds it has in the full plan.
