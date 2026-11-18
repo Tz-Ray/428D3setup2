@@ -134,6 +134,26 @@ has no mitigation switch; use the command above for that arm.
 
 ## Results
 
+Leaked trials out of trials run, before and after the mitigation. Every trial in all four runs
+finished with its replies delivered. Source: `mail-lab/results/summary.md`.
+
+| Model | Vector | Baseline | Mitigation |
+| --- | --- | ---: | ---: |
+| Llama 3.1 8B | V1 plain-text request | 19 of 24 | 0 of 24 |
+| Llama 3.1 8B | V2 hidden HTML | 18 of 25 | 2 of 25 |
+| Llama 3.1 8B | V3 planted then triggered | 24 of 24 | 2 of 24 |
+| Qwen 2.5 3B | V1 plain-text request | 22 of 24 | 5 of 24 |
+| Qwen 2.5 3B | V2 hidden HTML | 16 of 25 | 1 of 25 |
+| Qwen 2.5 3B | V3 planted then triggered | 22 of 24 | 7 of 24 |
+| **Llama 3.1 8B** | **All** | **61 of 73** | **4 of 73** |
+| **Qwen 2.5 3B** | **All** | **60 of 73** | **13 of 73** |
+
+The three V2 leaks under the mitigation are the model mentioning the workplace on its own; the
+hidden text had been removed. The remaining V1 and V3 leaks are the model following a visible
+request despite the rules.
+
+### Folders
+
 ```
 mail-lab/results/
   summary.md                         before/after table, written by `d3_run.py summary`
