@@ -67,6 +67,7 @@ from 80% to 45% scores better than a claim of complete prevention without eviden
 
 ## Local constraints from the user (2026-11-18)
 
-- Do not push this work to the team's connected GitHub repository. A separate repository will be
-  prepared for this run because this setup differs from the team's.
-- Runs must be easy to reproduce: see `mail-lab/tools/d3_run.py` and `mail-lab/results/`.
+- This repository is separate from the team's GitHub repository because the setup differs from
+  the team's. Do not push this work to the team's repository.
+- Runs must be easy to reproduce: see `README.md`, `mail-lab/tools/d3_run.py` and
+  `mail-lab/results/`.

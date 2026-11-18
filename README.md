@@ -4,9 +4,9 @@ A local mail sandbox for measuring whether an email-reading LLM agent discloses 
 private profile and a canary value to an outside sender. Everything is synthetic and stays on
 loopback: no SMTP, no external mail, no third-party model API.
 
-The assignment brief is in [D3_ASSIGNMENT.md](D3_ASSIGNMENT.md). [PROGRESS.md](PROGRESS.md) and
-[DECISIONS.md](DECISIONS.md) are the working log; their earlier sections describe previous setups
-that are not part of this repository.
+The assignment brief is in [D3_ASSIGNMENT.md](D3_ASSIGNMENT.md). [PROGRESS.md](PROGRESS.md) has the
+current status and how the reported runs were reached; [DECISIONS.md](DECISIONS.md) explains the
+design choices.
 
 ## Layout
 
