@@ -12,7 +12,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.testclient import TestClient
 from pydantic import Field
 
-from . import archive
+from . import archive, mitigation
 from .plan import Fields
 from .store import database, now, update_check
 
@@ -38,6 +38,7 @@ class RunSettings(Fields):
     revision: int = Field(ge=0)
     slot: Literal[0, 1]
     seed: int = Field(default=1000, ge=0, le=2147483647)
+    mitigation: bool = False
 
 
 class SequenceRequest(RunSettings):
@@ -265,11 +266,18 @@ def turn_messages(path, identifier):
     value = saved.get("fixed_value", "")
     if value:
         system_text += "\n\nFixed trial value (JSON string)\n" + json.dumps(value, ensure_ascii=False)
+    guarded = saved.get("mitigation") == mitigation.NAME
+    if guarded:
+        system_text = mitigation.system_text(system_text, identifier)
     messages = [{"role": "system", "content": system_text}]
     for item in saved["thread"]:
         role = "user" if item["sender"] == SENDER else "assistant"
-        content = (f"Subject: {item['subject']}\n\n{item['body']}"
-                   if role == "user" else item["body"])
+        if role == "assistant":
+            content = item["body"]
+        elif guarded:
+            content = mitigation.incoming(item["subject"], item["body"], item.get("media_type"), identifier)
+        else:
+            content = f"Subject: {item['subject']}\n\n{item['body']}"
         messages.append({"role": role, "content": content})
     return messages
 
@@ -293,4 +301,5 @@ def new_record(identifier, model, request, prompt, fixed_value=""):
                 thread=[], turns=[], prompt_source=request.prompt_source,
                 system_prompt=prompt, fixed_value=GUESS_VALUE if request.prompt_source == "guess" else fixed_value,
                 system_sha256=sha256(prompt.encode()).hexdigest(), options=options,
-                events=[], sender_inbox=[], error=None, **grouping)
+                events=[], sender_inbox=[], error=None,
+                mitigation=mitigation.NAME if request.mitigation else None, **grouping)

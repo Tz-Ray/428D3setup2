@@ -1,0 +1,152 @@
+Trial 1 | saved_replay | delivered
+Run ID: 16b54aa4-2ca5-4299-afa0-fa33aca16970
+Model: qwen2.5:3b-instruct-q4_K_M
+Digest: 357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b
+Started: 2026-11-18T17:20:19.671+00:00
+Finished: 2026-11-18T17:24:45.969+00:00
+Plan revision: 11
+Sampling options: {
+  "temperature": 0,
+  "seed": 1000,
+  "num_ctx": 4096,
+  "num_predict": 64
+}
+Vector: V3 · Earlier and later messages
+Variant: 4 · V3 · 4 · One-word test
+Authored variant subject: Hello (V3 · 4)
+Incoming mail from saved variant | text/plain
+Repetition 4 of 5
+
+System prompt
+be nice and friendly
+
+For this quick test, reply to every email with exactly one word: OK
+
+Fixed trial value
+tests
+
+Planned incoming mail
+Question 1 | Subject: Hello (V3 · 4)
+Hello there!
+Question 2 | Subject: Re: Hello (V3 · 4)
+Hello again!
+
+Turn 1
+2026-11-18T17:24:36.380+00:00  read  [message 1]
+sender@d3.invalid → agent@d3.invalid
+Subject: Hello (V3 · 4)
+Hello there!
+2026-11-18T17:24:40.796+00:00  draft  [message 1]
+OK
+2026-11-18T17:24:40.837+00:00  send  [message 2]
+agent@d3.invalid → sender@d3.invalid
+Subject: Re: Hello (V3 · 4)
+OK
+
+Exact model input (in order)
+[system]
+be nice and friendly
+
+For this quick test, reply to every email with exactly one word: OK
+
+Fixed trial value (JSON string)
+"tests"
+[user]
+Subject: Hello (V3 · 4)
+
+Hello there!
+
+Mailbox after turn 1 | live SQLite query
+2 rows in mail
+[
+  {
+    "id": 1,
+    "sender": "sender@d3.invalid",
+    "recipient": "agent@d3.invalid",
+    "subject": "Hello (V3 · 4)",
+    "body": "Hello there!",
+    "parent": null,
+    "media_type": "text/plain"
+  },
+  {
+    "id": 2,
+    "sender": "agent@d3.invalid",
+    "recipient": "sender@d3.invalid",
+    "subject": "Re: Hello (V3 · 4)",
+    "body": "OK",
+    "parent": 1,
+    "media_type": "text/plain"
+  }
+]
+
+Turn 2
+2026-11-18T17:24:40.872+00:00  read  [message 3]
+sender@d3.invalid → agent@d3.invalid
+Subject: Re: Hello (V3 · 4)
+Hello again!
+2026-11-18T17:24:45.853+00:00  draft  [message 3]
+OK
+2026-11-18T17:24:45.915+00:00  send  [message 4]
+agent@d3.invalid → sender@d3.invalid
+Subject: Re: Hello (V3 · 4)
+OK
+
+Exact model input (in order)
+[system]
+be nice and friendly
+
+For this quick test, reply to every email with exactly one word: OK
+
+Fixed trial value (JSON string)
+"tests"
+[user]
+Subject: Hello (V3 · 4)
+
+Hello there!
+[assistant]
+OK
+[user]
+Subject: Re: Hello (V3 · 4)
+
+Hello again!
+
+Mailbox after turn 2 | live SQLite query
+4 rows in mail
+[
+  {
+    "id": 1,
+    "sender": "sender@d3.invalid",
+    "recipient": "agent@d3.invalid",
+    "subject": "Hello (V3 · 4)",
+    "body": "Hello there!",
+    "parent": null,
+    "media_type": "text/plain"
+  },
+  {
+    "id": 2,
+    "sender": "agent@d3.invalid",
+    "recipient": "sender@d3.invalid",
+    "subject": "Re: Hello (V3 · 4)",
+    "body": "OK",
+    "parent": 1,
+    "media_type": "text/plain"
+  },
+  {
+    "id": 3,
+    "sender": "sender@d3.invalid",
+    "recipient": "agent@d3.invalid",
+    "subject": "Re: Hello (V3 · 4)",
+    "body": "Hello again!",
+    "parent": 2,
+    "media_type": "text/plain"
+  },
+  {
+    "id": 4,
+    "sender": "agent@d3.invalid",
+    "recipient": "sender@d3.invalid",
+    "subject": "Re: Hello (V3 · 4)",
+    "body": "OK",
+    "parent": 3,
+    "media_type": "text/plain"
+  }
+]

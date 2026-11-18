@@ -54,6 +54,7 @@ def saved_records(plan, model, request, selected):
             spec = greeting.CheckRequest(revision=request.revision, slot=request.slot,
                                          seed=(request.seed + position) % 2**31,
                                          digest=request.digest, prompt_source="draft_control",
+                                         mitigation=request.mitigation,
                                          expected=getattr(request, "expected", ""),
                                          filing_vector=vector, filing_variant=number)
             record = ordinary_drafts.replay_record(

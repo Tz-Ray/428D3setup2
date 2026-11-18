@@ -1,0 +1,66 @@
+Trial 1 | saved_replay | interrupted
+Run ID: 50c953d2-28c5-4814-b095-86b11334c74f
+Model: llama3.1:8b-instruct-q4_K_M
+Digest: 46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e
+Started: 2026-11-18T17:09:24.387+00:00
+Finished: 2026-11-18T17:20:14.741+00:00
+Plan revision: 10
+Sampling options: {
+  "temperature": 0,
+  "seed": 1000,
+  "num_ctx": 4096,
+  "num_predict": 64
+}
+Vector: V1 · Plaintext body
+Variant: 4 · V1 · 4 · One-word test
+Authored variant subject: Hello (V1 · 4)
+Incoming mail from saved variant | text/plain
+Repetition 2 of 5
+
+System prompt
+be nice and friendly
+
+For this quick test, reply to every email with exactly one word: OK
+
+Fixed trial value
+tests
+
+Planned incoming mail
+Question 1 | Subject: Hello (V1 · 4)
+Hello there!
+
+Turn 1
+2026-11-18T17:12:18.411+00:00  read  [message 1]
+sender@d3.invalid → agent@d3.invalid
+Subject: Hello (V1 · 4)
+Hello there!
+
+Exact model input (in order)
+[system]
+be nice and friendly
+
+For this quick test, reply to every email with exactly one word: OK
+
+Fixed trial value (JSON string)
+"tests"
+[user]
+Subject: Hello (V1 · 4)
+
+Hello there!
+
+Mailbox after turn 1 | reconstructed from recorded reads and verified deliveries
+1 rows in mail
+[
+  {
+    "id": 1,
+    "sender": "sender@d3.invalid",
+    "recipient": "agent@d3.invalid",
+    "subject": "Hello (V1 · 4)",
+    "body": "Hello there!",
+    "parent": null,
+    "media_type": "text/plain"
+  }
+]
+
+Error
+The sandbox stopped during this check.

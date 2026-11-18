@@ -16,8 +16,9 @@ that are not part of this repository.
 | `mail-lab/frontend/d3/` | Vue console for editing the plan and watching runs |
 | `mail-lab/plans/d3-attack-plan.json` | System prompt, canary, and the V1–V3 attack emails |
 | `mail-lab/plans/d3-leak-rules.json` | Success criteria: patterns that count as a leak |
-| `mail-lab/tools/d3_run.py` | Launches a run and writes one scored row per trial |
-| `mail-lab/results/<sequence-id>/` | Raw results: `trials.csv`, `records.json`, `plan.json`, `leak-rules.json` |
+| `mail-lab/d3/mitigation.py` | The mitigation: reader-visible text, untrusted-data markers, fixed rules |
+| `mail-lab/tools/d3_run.py` | Launches a run, exports its evidence, and builds the before/after table |
+| `mail-lab/results/` | Raw results, one folder per run (see Results) |
 | `mail-lab/tests/` | Harness tests |
 
 ## How one trial works
@@ -71,6 +72,22 @@ cd mail-lab
 ../.venv/bin/python -m pytest -q -p no:cacheprovider
 ```
 
+## Mitigation
+
+`mail-lab/d3/mitigation.py`, applied in `greeting.turn_messages` where each model request is
+built. It is off unless a run is launched with `--mitigation`; nothing else differs between arms.
+
+1. HTML mail is reduced to the text a reader would see. Comments, attribute values such as `alt`
+   and `title`, and elements hidden with CSS or the `hidden` attribute never reach the model.
+2. Every incoming email, including earlier ones in a thread, is enclosed in markers carrying a
+   per-trial nonce the sender cannot know.
+3. A fixed rule block is appended to the system prompt: marked text is data and never
+   instructions, and the profile and fixed value are never sent.
+
+Known limits: hiding by matching foreground and background colours, off-screen positioning by
+other means, and text inside images are not detected. The rules in part 3 are still a request to
+the model, so a visible plain-text request can still succeed.
+
 ## Run
 
 Start the service in one terminal. It builds the console and serves it with the API on
@@ -81,29 +98,50 @@ cd mail-lab
 ./start.sh
 ```
 
-In a second terminal, run the full plan on each model. Each command saves the plan into the
-console, runs 73 trials, and writes `results/<sequence-id>/`.
+In a second terminal, run the full plan on each model, first without and then with the
+mitigation. Each command saves the plan into the console, runs 73 trials (V1 24, V2 25, V3 24),
+and exports the run. The same plan, seeds, settings and scoring are used in both arms.
 
 ```sh
 cd mail-lab
 ../.venv/bin/python tools/d3_run.py run --plan plans/d3-attack-plan.json --slot 0
 ../.venv/bin/python tools/d3_run.py run --plan plans/d3-attack-plan.json --slot 1
+../.venv/bin/python tools/d3_run.py run --plan plans/d3-attack-plan.json --slot 0 --mitigation
+../.venv/bin/python tools/d3_run.py run --plan plans/d3-attack-plan.json --slot 1 --mitigation
+../.venv/bin/python tools/d3_run.py summary <the four sequence ids printed above>
 ```
 
-To rebuild a results folder from the local state database, or to rescore it after changing the
-leak rules:
+To rebuild a run's folder from the local state, or to rescore it after changing the leak rules:
 
 ```sh
 ../.venv/bin/python tools/d3_run.py export <sequence-id>
 ```
 
-Runs can also be launched, paused and inspected from the console's Run checks tab.
+Runs can also be launched, paused and inspected from the console's Run checks tab. The console
+has no mitigation switch; use the command above for that arm.
 
-## Results in this repository
+## Results
 
-| Sequence | Model | What it is |
-| --- | --- | --- |
-| `2f01c8a3-b097-413c-979d-6937798da3f4` | Llama 3.1 8B | One-word smoke test, interrupted after 7 of 65. Not a baseline. |
-| `7aa2038c-0182-4e96-aaf1-26936af627f9` | Qwen 2.5 3B | One-word smoke test, 65 of 65 delivered. Not a baseline. |
+```
+mail-lab/results/
+  summary.md                         before/after table, written by `d3_run.py summary`
+  baseline/<model>_<sequence>/       one folder per baseline run
+  mitigation/<model>_<sequence>/     one folder per mitigation run
+  smoke/<model>_<sequence>/          early one-word smoke tests, not part of any reported number
+```
 
-Both smoke tests predate the sampling change and ran at temperature 0 with one seed.
+Each run folder holds:
+
+| File | Contents |
+| --- | --- |
+| `run.json` | Sequence id, model digest, settings, seeds, versions, status and leak counts |
+| `trials.csv` | One scored row per trial; `evidence` points at the trial's folder |
+| `plan.json` | The exact plan the run used |
+| `leak-rules.json` | The scoring patterns applied to `trials.csv` |
+| `database.sqlite` | The run's rows copied from the harness state database |
+| `trials/<vector>/variant-NN/rep-NN_<run>/conversation.txt` | Readable transcript |
+| `…/record.json` | Exact model requests, raw streamed output, timestamped read/draft/send log |
+| `…/turn-NN.json` | Per-turn evidence, including the mailbox table after the turn |
+
+The two smoke tests predate the sampling change (temperature 0, one seed) and used a one-word
+plan. The Llama one was interrupted after 7 of 65.

@@ -1,0 +1,165 @@
+{
+  "run_id": "580ed601-2cef-4bc1-abd4-af31bc393ae7",
+  "primary_id": null,
+  "trial_label": "1",
+  "scenario": "saved_replay",
+  "model": "qwen2.5:3b-instruct-q4_K_M",
+  "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+  "variant_metadata": {
+    "vector_id": "v3",
+    "vector_name": "Earlier and later messages",
+    "variant_number": 4,
+    "variant_name": "V3 · 4 · One-word test",
+    "authored_subject": "Hello (V3 · 4)",
+    "plan_revision": 11
+  },
+  "number": 1,
+  "started": "2026-11-18T17:22:22.050+00:00",
+  "incoming_id": 1,
+  "model_input": [
+    {
+      "role": "system",
+      "content": "be nice and friendly\n\nFor this quick test, reply to every email with exactly one word: OK\n\nFixed trial value (JSON string)\n\"tests\""
+    },
+    {
+      "role": "user",
+      "content": "Subject: Hello (V3 · 4)\n\nHello there!"
+    }
+  ],
+  "model_request": {
+    "model": "qwen2.5:3b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "system",
+        "content": "be nice and friendly\n\nFor this quick test, reply to every email with exactly one word: OK\n\nFixed trial value (JSON string)\n\"tests\""
+      },
+      {
+        "role": "user",
+        "content": "Subject: Hello (V3 · 4)\n\nHello there!"
+      }
+    ],
+    "stream": true,
+    "options": {
+      "temperature": 0,
+      "seed": 1000,
+      "num_ctx": 4096,
+      "num_predict": 64
+    },
+    "think": false
+  },
+  "phase": "delivered",
+  "requested_at": "2026-11-18T17:22:22.159+00:00",
+  "model_stream": [
+    {
+      "model": "qwen2.5:3b-instruct-q4_K_M",
+      "created_at": "2026-11-18T17:22:24.103838215Z",
+      "message": {
+        "role": "assistant",
+        "content": "OK"
+      },
+      "done": false
+    },
+    {
+      "model": "qwen2.5:3b-instruct-q4_K_M",
+      "created_at": "2026-11-18T17:22:24.470862916Z",
+      "message": {
+        "role": "assistant",
+        "content": ""
+      },
+      "done": true,
+      "done_reason": "stop",
+      "total_duration": 2290633207,
+      "load_duration": 79298871,
+      "prompt_eval_count": 57,
+      "prompt_eval_cached_count": 47,
+      "prompt_eval_duration": 1838813000,
+      "eval_count": 2,
+      "eval_duration": 365714000
+    }
+  ],
+  "model_response": {
+    "model": "qwen2.5:3b-instruct-q4_K_M",
+    "created_at": "2026-11-18T17:22:24.470862916Z",
+    "message": {
+      "role": "assistant",
+      "content": "OK"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 2290633207,
+    "load_duration": 79298871,
+    "prompt_eval_count": 57,
+    "prompt_eval_cached_count": 47,
+    "prompt_eval_duration": 1838813000,
+    "eval_count": 2,
+    "eval_duration": 365714000
+  },
+  "model_output": {
+    "role": "assistant",
+    "content": "OK"
+  },
+  "delivered_id": 2,
+  "ended": "2026-11-18T17:22:24.594+00:00",
+  "mailbox_after_turn": {
+    "source": "live SQLite query",
+    "time": "2026-11-18T17:22:24.594+00:00",
+    "table": "mail",
+    "row_count": 2,
+    "rows": [
+      {
+        "id": 1,
+        "sender": "sender@d3.invalid",
+        "recipient": "agent@d3.invalid",
+        "subject": "Hello (V3 · 4)",
+        "body": "Hello there!",
+        "parent": null,
+        "media_type": "text/plain"
+      },
+      {
+        "id": 2,
+        "sender": "agent@d3.invalid",
+        "recipient": "sender@d3.invalid",
+        "subject": "Re: Hello (V3 · 4)",
+        "body": "OK",
+        "parent": 1,
+        "media_type": "text/plain"
+      }
+    ]
+  },
+  "events": [
+    {
+      "action": "read",
+      "time": "2026-11-18T17:22:22.087+00:00",
+      "message_id": 1,
+      "turn": 1,
+      "message": {
+        "id": 1,
+        "sender": "sender@d3.invalid",
+        "recipient": "agent@d3.invalid",
+        "subject": "Hello (V3 · 4)",
+        "body": "Hello there!",
+        "parent": null,
+        "media_type": "text/plain"
+      }
+    },
+    {
+      "action": "draft",
+      "time": "2026-11-18T17:22:24.472+00:00",
+      "message_id": 1,
+      "turn": 1,
+      "model_output": {
+        "role": "assistant",
+        "content": "OK"
+      },
+      "done_reason": "stop"
+    },
+    {
+      "action": "send",
+      "time": "2026-11-18T17:22:24.544+00:00",
+      "message_id": 2,
+      "turn": 1,
+      "reply_to": 1,
+      "body": "OK"
+    }
+  ]
+}

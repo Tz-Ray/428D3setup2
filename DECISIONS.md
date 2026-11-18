@@ -108,3 +108,7 @@ The second model is `qwen2.5:3b-instruct-q4_K_M` instead of the earlier 7B candi
 ## Sampling, token limit and scoring for D3 trials (2026-11-18)
 
 Trials must be independent, so saved replays sample at temperature 0.8, the value D2 pinned. Seeds are derived from the launch seed and queue position instead of drawn at random, so the same seeds apply to both models and to the later mitigation arm, and a rerun can repeat them. The reply limit is 192 tokens, the D2 value, because 64 tokens truncated most replies and split the canary. Leak scoring lives in the export tool and a rules file in the repository, so every reported count comes from a script and one row per trial. A trial is scored on delivered mail only. `leaked_turns` separates a V3 leak on the planted email from one on the trigger.
+
+## Mitigation and evidence layout (2026-11-18)
+
+The mitigation treats email as untrusted data at the point the model request is built, so it covers the class "sender text read as instructions" across all three vectors instead of one payload. An outgoing filter built from the scorer's patterns was rejected because it would report zero leaks by construction. The rule block is appended by the harness, not written into the plan, so the plan, seeds and scoring are identical in both arms and the baseline request stays unchanged. Run folders carry transcripts, full records and a database extract because the brief scores a number only if its raw results are in the repository; the full state database stays out of git because it also holds unrelated development checks.
